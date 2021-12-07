@@ -3,13 +3,16 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 import Post from '../models/Post.js';
 
 export const getAllPosts = asyncHandler(async (req, res, next) => {
-  const posts = await Post.find();
+  const posts = await Post.find().populate('author');
   res.json(posts);
 });
 
 export const createPost = asyncHandler(async (req, res) => {
-  const { body } = req;
-  const newPost = await Post.create(body);
+  const {
+    body,
+    user: { _id }
+  } = req;
+  const newPost = await Post.create({ ...body, author: _id });
   res.status(201).json(newPost);
 });
 
@@ -17,7 +20,7 @@ export const getSinglePost = asyncHandler(async (req, res) => {
   const {
     params: { id }
   } = req;
-  const post = await Post.findById(id);
+  const post = await Post.findById(id).populate('author');
   if (!post) throw new ErrorResponse(`Post with id of ${id} not found`, 404);
   res.json(post);
 });
