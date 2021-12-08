@@ -8,7 +8,8 @@ export const signUp = asyncHandler(async (req, res) => {
   const {
     body: { name, email, password }
   } = req;
-  if (!name || !email || !password) throw new ErrorResponse('Name, email and password are required', 400);
+  if (!name || !email || !password)
+    throw new ErrorResponse('Name, email and password are required', 400);
   const found = await User.findOne({ email });
   if (found) throw new ErrorResponse('User already exist', 403);
   const hash = await bcrypt.hash(password, 5);
@@ -22,8 +23,9 @@ export const signIn = asyncHandler(async (req, res) => {
     body: { email, password }
   } = req;
   if (!email || !password) throw new ErrorResponse('Email and password are required', 400);
-  const { _id, name: username, password: hash } = await User.findOne({ email }).select('+password');
-  if (!_id) throw new ErrorResponse('User does not exist', 404);
+  const found = await User.findOne({ email }).select('+password');
+  if (!found) throw new ErrorResponse('User does not exist', 404);
+  const { _id, name: username, password: hash } = found;
   const match = await bcrypt.compare(password, hash);
   if (!match) throw new ErrorResponse('Password is not correct', 401);
   const token = jwt.sign({ _id, username }, process.env.JWT_SECRET, { expiresIn: 3600 });
