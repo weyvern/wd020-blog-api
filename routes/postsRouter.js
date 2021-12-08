@@ -8,16 +8,16 @@ import {
 } from '../controllers/posts.js';
 import verifyToken from '../middlewares/verifyToken.js';
 import validateJOI from '../middlewares/validateJOI.js';
-import { postCreate } from '../joi/schemas.js';
+import { post } from '../joi/schemas.js';
 
 const postsRouter = Router();
 
-postsRouter.route('/').get(getAllPosts).post(verifyToken, validateJOI(postCreate), createPost);
+postsRouter.route('/').get(getAllPosts).post(verifyToken, validateJOI(post), createPost);
 
 postsRouter
   .route('/:id')
   .get(getSinglePost)
-  .put(verifyToken, updatePost)
+  .put(verifyToken, validateJOI(post), updatePost)
   .delete(verifyToken, deletePost);
 
 export default postsRouter;

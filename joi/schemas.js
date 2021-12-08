@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const postCreate = Joi.object({
+export const post = Joi.object({
   title: Joi.string().min(10).required().messages({
     'string.base': 'Title cannot be empty',
     'string.empty': 'Title cannot be empty',

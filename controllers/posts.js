@@ -29,19 +29,14 @@ export const updatePost = asyncHandler(async (req, res) => {
   const {
     user,
     params: { id },
-    body: { title, body, author }
+    body
   } = req;
   const postToUpdate = await Post.findById(id);
   if (!postToUpdate)
     throw new ErrorResponse(`Post with id of ${id} not found, could not update`, 404);
   if (user.id !== postToUpdate.author.toString())
     throw new ErrorResponse(`Only the author of the post can modify it. Go away`, 403);
-
-  const updatedPost = await Post.findOneAndUpdate(
-    { _id: id },
-    { title, body, author },
-    { new: true }
-  );
+  const updatedPost = await Post.findOneAndUpdate({ _id: id }, body, { new: true });
   res.json(updatedPost);
 });
 
