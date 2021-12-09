@@ -2,6 +2,7 @@ import 'dotenv/config.js';
 import './db/mongoose.js';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 import express from 'express';
 import usersRouter from './routes/usersRouter.js';
 import postsRouter from './routes/postsRouter.js';
@@ -15,6 +16,7 @@ const publicDir = join(__dirname, 'public/uploads');
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(cors({ origin: '*' }));
 app.use(express.static(publicDir));
 app.use(express.json());
 app.use('/auth', usersRouter);
