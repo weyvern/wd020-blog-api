@@ -5,6 +5,6 @@ import { uploadResponse } from '../controllers/uploads.js';
 
 const uploadsRouter = Router();
 
-uploadsRouter.post('/', verifyToken, imageUploader.single('profile_pic'), uploadResponse);
+uploadsRouter.post('/', verifyToken, imageUploader.single('image'), uploadResponse);
 
 export default uploadsRouter;
